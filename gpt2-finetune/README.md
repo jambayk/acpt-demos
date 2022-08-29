@@ -36,7 +36,7 @@ The demo is ready to be run.
 `aml_submit.py` submits an AML job. This job builds the training environment and runs the fine-tuning script in it.
 
 ```bash
-python aml_submit.py --ws_config [Path to workspace config json] --compute_target [Name of gpu cluster] --run_config [Accelerator configuration]
+python aml_submit.py --ws_config [Path to workspace config json] --compute [Name of gpu cluster] --run_config [Accelerator configuration]
 ```
 
 Here're the different configs and description that `job_submitter.py` takes through `--run_config` parameter.
@@ -51,7 +51,7 @@ Here're the different configs and description that `job_submitter.py` takes thro
 An example job submission to a compute target named `v100-32gb-eus` and using ORTModule + Deepspeed:
 
 ```
-python job_submitter.py --ws_config ws_config.json --compute_target v100-32gb-eus \
+python job_submitter.py --ws_config ws_config.json --compute v100-32gb-eus \
     --run_config ds_ort
 ```
 
