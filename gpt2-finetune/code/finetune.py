@@ -98,9 +98,9 @@ def main(
 
     import os
 
-    local_rank = os.environ.get("LOCAL_RANK", -1)
-    assert local_rank != -1
-    cache_dir = f".cache_{local_rank}"
+    rank = os.environ.get("RANK", -1)
+    assert rank != -1
+    cache_dir = f".cache_{rank}"
 
     # get raw datasets
     raw_datasets = load_raw_dataset(train_path, validation_path, cache_dir=cache_dir)
@@ -121,7 +121,7 @@ def main(
         "eval_accumulation_steps": 1,
         "max_steps": max_steps,
         "save_strategy": "no",
-        # "report_to" : "azure_ml",
+        "report_to" : "azure_ml",
         "fp16": fp16,
         "deepspeed": "ds_config_zero_1.json" if deepspeed else None,
         "learning_rate": 5e-6,

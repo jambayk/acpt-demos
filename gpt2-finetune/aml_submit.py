@@ -10,8 +10,8 @@ def run_config_to_args(run_config):
     mapping = {
         "no_acc": ["--fp16", "True"],
         "ds": ["--fp16", "True", "--deepspeed", "True"],
-        "ort": ["--fp16", "True", "ort", "True"],
-        "ds_ort": ["--fp16", "True", "--deepspeed", "True", "ort", "True"],
+        "ort": ["--fp16", "True", "--ort", "True"],
+        "ds_ort": ["--fp16", "True", "--deepspeed", "True", "--ort", "True"],
     }
     return mapping[run_config]
 
