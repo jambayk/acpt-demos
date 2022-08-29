@@ -1,17 +1,17 @@
+import argparse
+import json
 import os
 import re
-import json
-import argparse
 from pathlib import Path
 from urllib.parse import urlparse
+
 import requests
 
 parser = argparse.ArgumentParser(description="Prepare data for Homer fine-tuning")
 
-parser.add_argument("--source", type=str, default="homer_source.json",
-                    help="Json file with sources information")
-parser.add_argument("--split", type=int, default=80,
-                    help="Percentage of data to use as training data")
+parser.add_argument("--source", type=str, default="homer_source.json", help="Json file with sources information")
+parser.add_argument("--split", type=int, default=80, help="Percentage of data to use as training data")
+
 
 def check(s, ignore):
     r = []
@@ -31,10 +31,12 @@ def check(s, ignore):
 
     return any(r)
 
+
 def substitute(s, replace):
     for a in replace.keys():
         s = re.sub(a, replace[a], s)
     return s
+
 
 def load(
     title="",
@@ -69,28 +71,25 @@ def load(
     sentences = [
         f"{s.strip()}."
         for s in " ".join(
-            [
-                substitute(item, replace).strip()
-                for item in lines
-                if len(item) > 0 and not check(item, ignore)
-            ]
+            [substitute(item, replace).strip() for item in lines if len(item) > 0 and not check(item, ignore)]
         ).split(".")
     ]
     print("done!")
     return sentences
+
 
 def main(raw_args=None):
     args = parser.parse_args(raw_args)
     print(args.__dict__)
 
     assert args.split < 100, "Split value must be less than 100"
-    train = args.split / 100.
+    train = args.split / 100.0
     print(f"Using {train} for training and {1-train} for validation")
 
     root_dir = Path(__file__).resolve().parent
     data_source = root_dir / args.source
 
-    data_dir =  root_dir / "code" / "data"
+    data_dir = root_dir / "code" / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
 
     # clean data and create data files
@@ -106,6 +105,7 @@ def main(raw_args=None):
                             print(text[i], file=t)
                         else:
                             print(text[i], file=v)
+
 
 if __name__ == "__main__":
     main()

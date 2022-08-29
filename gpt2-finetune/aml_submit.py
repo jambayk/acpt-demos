@@ -1,18 +1,17 @@
 import argparse
 from pathlib import Path
 
-from azure.ai.ml import MLClient
+from azure.ai.ml import MLClient, command
+from azure.ai.ml.entities import BuildContext, Environment
 from azure.identity import DefaultAzureCredential
-from azure.ai.ml import command
-from azure.ai.ml.entities import Environment, BuildContext
 
 
 def run_config_to_args(run_config):
     mapping = {
-    "no_acc" : ["--fp16", "True"],
-    "ds" : ["--fp16", "True", "--deepspeed", "True"],
-    "ort" : ["--fp16", "True", "ort", "True"],
-    "ds_ort" : ["--fp16", "True", "--deepspeed", "True", "ort", "True"]
+        "no_acc": ["--fp16", "True"],
+        "ds": ["--fp16", "True", "--deepspeed", "True"],
+        "ort": ["--fp16", "True", "ort", "True"],
+        "ds_ort": ["--fp16", "True", "--deepspeed", "True", "ort", "True"],
     }
     return mapping[run_config]
 
@@ -39,20 +38,17 @@ def get_args(raw_args=None):
     )
 
     # fine-tune hyperparameters
-    parser.add_argument("--block_size", type=int, default=1024,
-                        help="Block size for text in each training example")
-    parser.add_argument("--batch_size", type=int, default=8,
-                        help="Batch size per step on each device")
-    parser.add_argument("--max_steps", type=int, default=2000,
-                        help="Max step that a model will run")
+    parser.add_argument("--block_size", type=int, default=1024, help="Block size for text in each training example")
+    parser.add_argument("--batch_size", type=int, default=8, help="Batch size per step on each device")
+    parser.add_argument("--max_steps", type=int, default=2000, help="Max step that a model will run")
 
     # accelerator hyperparameters
-    parser.add_argument("--run_config", type=run_config_to_args, 
-        default="no_acc", help="Configs to run for model")
+    parser.add_argument("--run_config", type=run_config_to_args, default="no_acc", help="Configs to run for model")
 
     # parse args, extra_args used for job configuration
     args = parser.parse_args(raw_args)
     return args
+
 
 def main(raw_args=None):
     args = get_args(raw_args)
@@ -84,8 +80,7 @@ def main(raw_args=None):
             f" {' '.join(args.run_config)}"
         ),
         environment=Environment(
-            description="ACPT GPT2 fine-tune environment", 
-            build = BuildContext(path=environment_dir)
+            description="ACPT GPT2 fine-tune environment", build=BuildContext(path=environment_dir)
         ),
         distribution={
             "type": "pytorch",
@@ -103,6 +98,7 @@ def main(raw_args=None):
 
     aml_url = returned_job.studio_url
     print("job link:", aml_url)
+
 
 if __name__ == "__main__":
     main()
