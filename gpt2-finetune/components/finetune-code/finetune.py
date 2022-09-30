@@ -2,8 +2,8 @@ import argparse
 import math
 from itertools import chain
 from pathlib import Path
-from azureml.core.run import Run
 
+from azureml.core.run import Run
 from datasets import load_dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, default_data_collator
 
@@ -95,7 +95,7 @@ def main(
     max_steps: int,
     ort: bool,
     fp16: bool,
-    deepspeed: bool
+    deepspeed: bool,
 ):
 
     import os
@@ -215,8 +215,6 @@ if __name__ == "__main__":
     parser.add_argument("--ort", type=str2bool, default=False, help="Use ORTModule")
     parser.add_argument("--fp16", type=str2bool, default=False, help="Use mixed precision")
     parser.add_argument("--deepspeed", type=str2bool, default=False, help="Use deepspeed")
-
-    
 
     args = parser.parse_args()
 

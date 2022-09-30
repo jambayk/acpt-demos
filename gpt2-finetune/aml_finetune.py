@@ -56,8 +56,8 @@ def main(raw_args=None):
     args = get_args(raw_args)
     run_config_args = run_config_to_args(args.run_config)
 
-    root_dir = Path(__file__).resolve().parent 
-    component_dir = root_dir/ "components"
+    root_dir = Path(__file__).resolve().parent
+    component_dir = root_dir / "components"
 
     # connect to the workspace
     ws_config_path = root_dir / args.ws_config

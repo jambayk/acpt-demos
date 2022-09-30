@@ -66,7 +66,7 @@ Other parameters.
 | --max_steps         | Max step that a model will run. Defaults to 2000. |
 
 ## Deploy model to Endpoint
-`aml_finetune.py` trains the model and registers it in your workspace as a Model named `acpt-gpt2`. 
+`aml_finetune.py` trains the model and registers it in your workspace as a Model named `acpt-gpt2`.
 
 `aml_deploy.py` deploys the model registered as an endpoint and tests a sample prompt once deployment has succeeded. You can use the python sdk to test further prompt or use the Studio UI (under `Workspace -> Endpoints -> Real-time endpoints -> [Endpoint Name] -> test).
 

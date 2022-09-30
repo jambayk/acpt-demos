@@ -1,9 +1,10 @@
-import os
-import json
-import time
-import logging
 import datetime
+import json
+import logging
+import os
+import time
 from pathlib import Path
+
 from transformers import pipeline
 from transformers.pipelines.text_generation import TextGenerationPipeline
 
@@ -92,10 +93,14 @@ if __name__ == "__main__":
 
     init()
 
-    output = run(json.dumps({
-        "prompt": "Hello, I'm a language model,",
-        "length": 100,
-        "count": 5,
-    }))
+    output = run(
+        json.dumps(
+            {
+                "prompt": "Hello, I'm a language model,",
+                "length": 100,
+                "count": 5,
+            }
+        )
+    )
 
     print(json.dumps(output, indent=4))

@@ -1,5 +1,6 @@
 import argparse
 import datetime
+import json
 from pathlib import Path
 
 from azure.ai.ml import MLClient
@@ -8,10 +9,9 @@ from azure.ai.ml.entities import (
     CodeConfiguration,
     Environment,
     ManagedOnlineDeployment,
-    ManagedOnlineEndpoint
+    ManagedOnlineEndpoint,
 )
 from azure.identity import DefaultAzureCredential
-import json
 
 
 def get_args(raw_args=None):
@@ -29,11 +29,12 @@ def get_args(raw_args=None):
     args = parser.parse_args(raw_args)
     return args
 
+
 def main(raw_args=None):
     args = get_args(raw_args)
 
-    root_dir = Path(__file__).resolve().parent 
-    component_dir = root_dir/ "components"
+    root_dir = Path(__file__).resolve().parent
+    component_dir = root_dir / "components"
 
     # connect to the workspace
     ws_config_path = root_dir / args.ws_config
@@ -50,9 +51,7 @@ def main(raw_args=None):
     # create an online endpoint
     print("Creating online endpoint...")
     endpoint = ManagedOnlineEndpoint(
-        name=online_endpoint_name,
-        description="GPT2 Finetuned Online Endpoint",
-        auth_mode="key"
+        name=online_endpoint_name, description="GPT2 Finetuned Online Endpoint", auth_mode="key"
     )
     ml_client.begin_create_or_update(endpoint)
 
@@ -65,9 +64,7 @@ def main(raw_args=None):
         environment=Environment(
             description="ACPT GPT2 fine-tune environment", build=BuildContext(path=environment_dir)
         ),
-        code_configuration=CodeConfiguration(
-            code=code_dir, scoring_script="score.py"
-        ),
+        code_configuration=CodeConfiguration(code=code_dir, scoring_script="score.py"),
         instance_type="Standard_DS5_v2",
         instance_count=1,
     )
@@ -90,6 +87,6 @@ def main(raw_args=None):
     print(f"Prompt: {sample_prompt}")
     print(f"Model Output: {model_output}")
 
+
 if __name__ == "__main__":
     main()
-
