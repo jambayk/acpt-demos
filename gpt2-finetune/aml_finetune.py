@@ -40,7 +40,7 @@ def get_args(raw_args=None):
     # fine-tune hyperparameters
     parser.add_argument("--block_size", type=int, default=1024, help="Block size for text in each training example")
     parser.add_argument("--batch_size", type=int, default=8, help="Batch size per step on each device")
-    parser.add_argument("--max_steps", type=int, default=2000, help="Max step that a model will run")
+    parser.add_argument("--max_steps", type=int, default=200, help="Max step that a model will run")
 
     # accelerator hyperparameters
     parser.add_argument(
@@ -56,15 +56,16 @@ def main(raw_args=None):
     args = get_args(raw_args)
     run_config_args = run_config_to_args(args.run_config)
 
-    root_dir = Path(__file__).resolve().parent
+    root_dir = Path(__file__).resolve().parent 
+    component_dir = root_dir/ "components"
 
     # connect to the workspace
     ws_config_path = root_dir / args.ws_config
     ml_client = MLClient.from_config(credential=DefaultAzureCredential(), path=ws_config_path)
 
     # code directory
-    code_dir = root_dir / "code"
-    environment_dir = root_dir / "environment"
+    code_dir = component_dir / "finetune-code"
+    environment_dir = component_dir / "environment"
 
     # tags
     tags = {

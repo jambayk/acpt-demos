@@ -33,13 +33,13 @@ python prepare_data.py
 ## Run Experiments
 The demo is ready to be run.
 
-`aml_submit.py` submits an AML job. This job builds the training environment and runs the fine-tuning script in it.
+`aml_finetune.py` submits an AML job. This job builds the training environment and runs the fine-tuning script in it.
 
 ```bash
-python aml_submit.py --ws_config [Path to workspace config json] --compute [Name of gpu cluster] --run_config [Accelerator configuration]
+python aml_finetune.py --ws_config [Path to workspace config json] --compute [Name of gpu cluster] --run_config [Accelerator configuration]
 ```
 
-Here're the different configs and description that `job_submitter.py` takes through `--run_config` parameter.
+Here are the different configs and description that `aml_finetune.py` takes through `--run_config` parameter.
 
 | Config    | Description |
 |-----------|-------------|
@@ -51,7 +51,7 @@ Here're the different configs and description that `job_submitter.py` takes thro
 An example job submission to a compute target named `v100-32gb-eus` and using ORTModule + Deepspeed:
 
 ```
-python job_submitter.py --ws_config ws_config.json --compute v100-32gb-eus \
+python aml_finetune.py --ws_config ws_config.json --compute v100-32gb-eus \
     --run_config ds_ort
 ```
 
@@ -65,6 +65,16 @@ Other parameters.
 | --batch_size        | Model batchsize per GPU. Defaults to 8. |
 | --max_steps         | Max step that a model will run. Defaults to 2000. |
 
+## Deploy model to Endpoint
+`aml_finetune.py` trains the model and registers it in your workspace as a Model named `acpt-gpt2`. 
+
+`aml_deploy.py` deploys the model registered as an endpoint and tests a sample prompt once deployment has succeeded. You can use the python sdk to test further prompt or use the Studio UI (under `Workspace -> Endpoints -> Real-time endpoints -> [Endpoint Name] -> test).
+
+```bash
+aml_deploy.py --ws_config [Path to workspace config json]
+```
+
+Note: Deployment may take some time to complete. Delete the deployment after use.
 
 ## FAQ
 ### Problem with Azure Authentication
